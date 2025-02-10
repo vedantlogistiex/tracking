@@ -33,6 +33,7 @@ const TrackingPage = ({ layout, colors, ...props }) => {
   const [courierCode, setCourierCode] = useState("");
   const [markRTOStatus, setMarkRTOStatus] = useState(false);
   const [myData, setMyData] = useState(null);
+  const [isLoaded, setIsLoaded] = useState(false);
 
   useEffect(() => {
     if (trackingID) {
@@ -229,6 +230,7 @@ const TrackingPage = ({ layout, colors, ...props }) => {
       );
     } finally {
       setLoading(false);
+      setIsLoaded(true);
     }
   };
 
@@ -238,9 +240,11 @@ const TrackingPage = ({ layout, colors, ...props }) => {
   console.log("myData", myData);
 
   useEffect(() => {
-    // Scroll to 90vh from the top of the page
-    window.scrollTo(0, window.innerHeight * 0.9);
-  }, []);
+    // Scroll to 90vh after loading is complete
+    if (!loading && isLoaded) {
+      window.scrollTo(0, window.innerHeight * 0.9);
+    }
+  }, [loading, isLoaded]); // This will trigger when loading or isLoaded changes
 
   return (
     <div style={{ fontFamily: "Inter, sans-serif" }}>

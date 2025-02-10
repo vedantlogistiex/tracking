@@ -46,6 +46,13 @@ const TrackingForm = ({ colors, updateTrackingId }) => {
     }
   };
 
+  const handleKeyDown = (event) => {
+    // Check if Enter key (keyCode 13) is pressed
+    if (event.key === "Enter") {
+      handleSubmit(event);
+    }
+  };
+
   return (
     <div
       className="p-6 rounded-lg shadow-md max-w-sm w-full flex flex-col gap-4"
@@ -63,6 +70,7 @@ const TrackingForm = ({ colors, updateTrackingId }) => {
         onChange={handleInputChange}
         sx={{ my: 2 }}
         inputProps={{ "aria-label": "Enter tracking number" }}
+        onKeyDown={handleKeyDown} // Add the onKeyDown handler here
       />
 
       {errorMsg && (
