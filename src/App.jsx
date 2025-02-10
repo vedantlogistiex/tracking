@@ -1,7 +1,7 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import "./App.css";
 import Header from "./components/Header";
-import TrackingPage from "./pages/CourierTracking2";
+import TrackingPage from "./pages/CourierTracking";
 import { useEffect, useState } from "react";
 import Footer from "./components/Footer";
 import CustomDrawer from "./components/Drawer";

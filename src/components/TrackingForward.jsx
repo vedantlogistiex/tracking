@@ -66,7 +66,7 @@ export default function TrackingForword(props) {
                         <div
                           className={`sm:flex ${
                             layout.horizontal === true ? "lg:w-[130px]" : "lg:h-[50px] w-[2px]"
-                          } w-[20px] border-2 ${
+                          } border-2 ${
                             isState || cancellationStatus || markRTOStatus ? "border-solid" : "border-dashed"
                           }`}
                           style={{ borderColor: colors.secondary }}
