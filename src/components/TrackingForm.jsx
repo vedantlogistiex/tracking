@@ -2,39 +2,42 @@ import React, { useState } from "react";
 import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
 import { SHIPPING_URL } from "../Utils/backendURL";
-import { Button, CircularProgress, TextField } from "@mui/material";
+import { Button, CircularProgress, TextField, Typography } from "@mui/material";
 
-const TrackingForm = ({ colors }) => {
+const TrackingForm = ({ colors, updateTrackingId }) => {
   const { shipmentId: initialShipmentId } = useParams();
-  const [shipmentId, setShipmentId] = useState(initialShipmentId || ""); // Initialize with URL param
+  const [shipmentId, setShipmentId] = useState(initialShipmentId || "");
   const [errorMsg, setErrorMsg] = useState("");
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
   const handleInputChange = (event) => {
     setShipmentId(event.target.value);
-    setErrorMsg("");
+    setErrorMsg(""); // Clear previous errors on change
   };
 
   const handleSubmit = async (event) => {
     event.preventDefault();
     if (!shipmentId.trim()) {
-      alert("Please enter a shipment ID.");
+      setErrorMsg("Please enter a valid shipment ID.");
       return;
     }
 
     setLoading(true);
     setErrorMsg("");
 
+    updateTrackingId(shipmentId);
+
     try {
       const response = await axios.get(`${SHIPPING_URL}/api/shipping/v1/status_public/v2?awb_number=${shipmentId}`);
+
       if (response.status === 200) {
         navigate(`/trackpage/trackShipment/${shipmentId}`);
       } else {
         setErrorMsg(`No details found for Tracking ID: ${shipmentId}.`);
       }
     } catch (err) {
-      setErrorMsg(`Error tracking ${shipmentId}: ${err.response?.data?.message || err.message}`);
+      setErrorMsg(err.response?.data?.message || `Error tracking ${shipmentId}: ${err.message}`);
     } finally {
       setLoading(false);
     }
@@ -45,25 +48,38 @@ const TrackingForm = ({ colors }) => {
       className="p-6 rounded-lg shadow-md max-w-sm w-full flex flex-col gap-4"
       style={{ backgroundColor: colors.paper }}
     >
-      <h2 className="text-xl font-bold" style={{ color: colors.textPrimary }}>
-        Track your order
-      </h2>
+      <Typography variant="h5" sx={{ color: colors.textPrimary, fontWeight: "bold" }}>
+        Track Your Order
+      </Typography>
+
       <TextField
         fullWidth
         variant="outlined"
         placeholder="Enter your order number"
         value={shipmentId}
         onChange={handleInputChange}
-        className="my-4"
+        sx={{ my: 2 }}
+        inputProps={{ "aria-label": "Enter tracking number" }}
       />
-      {errorMsg && <p className="text-red-500 text-center">{errorMsg}</p>}
+
+      {errorMsg && (
+        <Typography color="error" className="text-center">
+          {errorMsg}
+        </Typography>
+      )}
+
       <Button
         onClick={handleSubmit}
         fullWidth
         variant="contained"
-        style={{ backgroundColor: colors.secondary, color: colors.tertiary }}
+        sx={{
+          backgroundColor: colors.secondary,
+          color: colors.tertiary,
+          "&:hover": { backgroundColor: colors.secondary },
+        }}
+        disabled={loading}
       >
-        {loading ? <CircularProgress size={24} style={{ color: colors.tertiary }} /> : "Track Shipment"}
+        {loading ? <CircularProgress size={24} sx={{ color: colors.tertiary }} /> : "Track Shipment"}
       </Button>
     </div>
   );

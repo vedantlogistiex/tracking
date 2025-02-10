@@ -41,6 +41,18 @@ const TrackingPage = ({ layout, colors, ...props }) => {
     }
   }, [trackingID]);
 
+   const updateTrackingId = (newTrackingId) => {
+     setShipmentId(newTrackingId);
+   };
+
+   // Fetch data based on the updated shipmentId
+   useEffect(() => {
+     if (shipmentId) {
+       fetchData(shipmentId);
+     }
+   }, [shipmentId]);
+
+
   const getEventDescription = (event, t) => {
     const eventType = event?.shipment_event?.event;
     let location = event?.current_location?.node || event?.current_location?.city;
@@ -143,6 +155,7 @@ const TrackingPage = ({ layout, colors, ...props }) => {
   }, [eventsArr, props?.t, props.tReady]);
 
   const fetchData = async () => {
+    console.log("fetchData function called");
     setLoading(true);
     try {
       const response = await axios.get(`${SHIPPING_URL}/api/shipping/v1/status_public/v2?awb_number=${shipmentId}`);
@@ -223,34 +236,10 @@ const TrackingPage = ({ layout, colors, ...props }) => {
   console.log("eventsArr", eventsArr);
   console.log("myData", myData);
 
-  const renderTimeline = (trackingData) => {
-    if (!trackingData) return null;
-    return trackingData?.map((event, index) =>
-      event?.eventList?.map((eventItem, index1) => (
-        <tr
-          className="even:bg-[#eff6ff] even:dark:bg-gray-900 odd:bg-gray-50 odd:dark:bg-black border-b dark:border-gray-700"
-          key={`${index}-${index1}`}
-        >
-          <td className="lg:px-4 px-2 py-2 lg:text-base text-xs">
-            {new Date(eventItem.eventTime).toLocaleDateString("en-GB", {
-              year: "2-digit",
-              month: "2-digit",
-              day: "2-digit",
-            })}
-          </td>
-          <td className="lg:px-4 px-2 py-2 lg:text-base text-xs">
-            {new Date(eventItem.eventTime).toLocaleTimeString()}
-          </td>
-          <td className="lg:px-4 px-2 py-2 lg:text-base text-xs">{eventItem.eventDescription}</td>
-        </tr>
-      ))
-    );
-  };
-
   return (
     <div style={{ fontFamily: "Inter, sans-serif" }}>
       <div className="mx-auto">
-        <HeroSection colors={colors} />
+        <HeroSection colors={colors} updateTrackingId={updateTrackingId} />
         {loading ? (
           <Loader colors={colors} />
         ) : (
