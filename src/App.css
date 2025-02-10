@@ -1,0 +1,17 @@
+body {
+  overflow-x: hidden;
+}
+
+.headerOne.gradientBanner:after {
+  transform: rotate(-3deg);
+  bottom: -100px;
+  left: -5px;
+  z-index: 1;
+  width: 105%;
+  max-width: 100vw;
+  height: 100px;
+  background: #fff;
+  position: absolute;
+  content: "";
+  clip-path: inset(0 0 -10px 0); /* Clips any overflow */
+}
