@@ -41,17 +41,18 @@ const TrackingPage = ({ layout, colors, ...props }) => {
     }
   }, [trackingID]);
 
-   const updateTrackingId = (newTrackingId) => {
-     setShipmentId(newTrackingId);
-   };
+  // Define the function that updates the tracking ID
+  const updateTrackingId = (id) => {
+    setShipmentId(id);
+    console.log("Tracking ID updated:", id); // Optional, for debugging
+  };
 
-   // Fetch data based on the updated shipmentId
-   useEffect(() => {
-     if (shipmentId) {
-       fetchData(shipmentId);
-     }
-   }, [shipmentId]);
-
+  // Fetch data based on the updated shipmentId
+  useEffect(() => {
+    if (shipmentId) {
+      fetchData(shipmentId);
+    }
+  }, [shipmentId]);
 
   const getEventDescription = (event, t) => {
     const eventType = event?.shipment_event?.event;
@@ -235,6 +236,11 @@ const TrackingPage = ({ layout, colors, ...props }) => {
   console.log("isReturnShipment", isReturnShipment);
   console.log("eventsArr", eventsArr);
   console.log("myData", myData);
+
+  useEffect(() => {
+    // Scroll to 90vh from the top of the page
+    window.scrollTo(0, window.innerHeight * 0.9);
+  }, []);
 
   return (
     <div style={{ fontFamily: "Inter, sans-serif" }}>

@@ -26,7 +26,10 @@ const TrackingForm = ({ colors, updateTrackingId }) => {
     setLoading(true);
     setErrorMsg("");
 
-    updateTrackingId(shipmentId);
+    // Ensure updateTrackingId is a function and call it
+    if (typeof updateTrackingId === "function") {
+      updateTrackingId(shipmentId);
+    }
 
     try {
       const response = await axios.get(`${SHIPPING_URL}/api/shipping/v1/status_public/v2?awb_number=${shipmentId}`);
