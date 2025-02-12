@@ -1,26 +1,23 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import "./App.css";
-import Header from "./components/Header";
 import TrackingPage from "./pages/CourierTracking";
 import { useEffect, useState } from "react";
-import Footer from "./components/Footer";
 import CustomDrawer from "./components/Drawer";
 import HeroSection from "./components/HeroSection";
-import NoPage from "./pages/NoPage";
+import NoPage from "./pages/NoPage"; // Import NoPage component
+import Layout from "./components/Layout"; // Layout component
 
 function App() {
   const [colors, setColors] = useState({
-    primary: "#f9e7d8", // Warm Beige (Soft, Elegant)
-    secondary: "#8B5E3C", // Deep Brown (Good Contrast with Beige)
-    tertiary: "#FFF8F2", // Soft Cream (For a Light Contrast)
-    paper: "#FFFFFF", // Clean White (For Backgrounds)
-    textPrimary: "#4A3222", // Rich Dark Brown (Readable on Light Backgrounds)
-    textSecondary: "#FFFFFF", // White (Readable on Dark Backgrounds)
+    primary: "#f9e7d8",
+    secondary: "#8B5E3C",
+    tertiary: "#FFF8F2",
+    paper: "#FFFFFF",
+    textPrimary: "#4A3222",
+    textSecondary: "#FFFFFF",
   });
 
-  const [layout, setLayout] = useState({
-    horizontal: true,
-  });
+  const [layout, setLayout] = useState({ horizontal: true });
   const [settingsOpen, setSettingsOpen] = useState(false);
 
   const [customer, setCustomer] = useState({
@@ -33,9 +30,7 @@ function App() {
     },
   });
 
-  // Use useEffect to set the CSS variables when colors change
   useEffect(() => {
-    // Set the CSS variables on the root or body element
     document.documentElement.style.setProperty("--primary-color", colors.primary);
     document.documentElement.style.setProperty("--secondary-color", colors.secondary);
     document.documentElement.style.setProperty("--tertiary-color", colors.tertiary);
@@ -46,43 +41,29 @@ function App() {
 
   return (
     <BrowserRouter>
-      <div style={{ fontFamily: "Inter, sans-serif" }}>
-        <div className="mx-auto">
-          <div
-            style={{
-              background: `transparent linear-gradient(244deg, ${colors.primary}, ${colors.tertiary}) 0 0 no-repeat padding-box`,
-              backgroundPosition: "bottom",
-              "--primary-color": colors.primary,
-              "--secondary-color": colors.secondary,
-              "--paper-color": colors.paper,
-            }}
-          >
-            {/* Header with setSettingsOpen */}
-            <Header colors={colors} setSettingsOpen={setSettingsOpen} customer={customer} />
+      <Layout colors={colors} setSettingsOpen={setSettingsOpen} customer={customer}>
+        <Routes>
+          <Route path="/" element={<HeroSection colors={colors} />} />
+          <Route
+            path="/trackpage/trackShipment/:shipmentId"
+            element={<TrackingPage colors={colors} layout={layout} />}
+          />
+          <Route path="/404" element={<NoPage colors={colors} />} />
+          <Route path="/not-found" element={<NoPage colors={colors} />} />
+          {/* Catch-all route for undefined paths */}
+          <Route path="*" element={<NoPage colors={colors} />} />
+        </Routes>
 
-            <Routes>
-              <Route path="/" element={<HeroSection colors={colors} />} />
-              <Route
-                path="/trackpage/trackShipment/:shipmentId"
-                element={<TrackingPage colors={colors} layout={layout} />}
-              />
-              <Route path="*" element={<NoPage colors={colors} />} />
-            </Routes>
-
-            <Footer colors={colors} />
-
-            {/* Drawer Component */}
-            <CustomDrawer
-              open={settingsOpen}
-              setOpen={setSettingsOpen} // Function to close drawer
-              colors={colors}
-              setColors={setColors} // Pass setColors to update theme
-              layout={layout}
-              setLayout={setLayout} // Pass layout if needed
-            />
-          </div>
-        </div>
-      </div>
+        {/* Drawer Component */}
+        <CustomDrawer
+          open={settingsOpen}
+          setOpen={setSettingsOpen}
+          colors={colors}
+          setColors={setColors}
+          layout={layout}
+          setLayout={setLayout}
+        />
+      </Layout>
     </BrowserRouter>
   );
 }

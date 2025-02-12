@@ -14,7 +14,7 @@ const NoPage = ({ colors }) => {
   }, []);
 
   return (
-    <main className="grid max-w-7xl mx-auto min-h-[78.2vh] place-items-center py-8">
+    <main className="grid max-w-7xl mx-auto min-h-[100vh] place-items-center py-8">
       <motion.div
         className="text-center"
         initial={{ opacity: 0, y: 20 }}
