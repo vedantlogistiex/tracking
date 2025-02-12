@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import Footer from "./components/Footer";
 import CustomDrawer from "./components/Drawer";
 import HeroSection from "./components/HeroSection";
+import NoPage from "./pages/NoPage";
 
 function App() {
   const [colors, setColors] = useState({
@@ -65,6 +66,7 @@ function App() {
                 path="/trackpage/trackShipment/:shipmentId"
                 element={<TrackingPage colors={colors} layout={layout} />}
               />
+              <Route path="*" element={<NoPage colors={colors} />} />
             </Routes>
 
             <Footer colors={colors} />
